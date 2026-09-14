@@ -1,0 +1,273 @@
+\documentclass[11pt]{amsart}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage[capitalize,nameinlink]{cleveref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{question}[theorem]{Question}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Simp}{S^{m-1}}
+\DeclareMathOperator{\supp}{supp}
+\DeclareMathOperator{\tr}{tr}
+
+\title[Non-unique fixed points of strictly non-Volterra operators]{Strictly non-Volterra quadratic stochastic operators in four or more types: the fixed point need not be unique}
+\author{Yitzchak Shmalo}
+\address{Einstein Institute of Mathematics, The Hebrew University of Jerusalem, Jerusalem, Israel}
+\email{yitzchak.shmalo@gmail.com}
+\date{\today}
+
+\begin{document}
+
+\begin{abstract}
+A quadratic stochastic operator on the simplex of probability vectors on $m$ types is strictly non-Volterra when a pair of parents of types $i$ and $j$ never produces an offspring of type $i$ or $j$. For $m=3$, Ganikhodzhaev, Mukhamedov and Rozikov proved that every such operator has a unique fixed point, that it is not attractive, and that the operator has $2$-cycles and $3$-cycles depending on the parameters; Problem~11 of the 2009 list of open problems on quadratic stochastic operators asks whether this holds for $m\ge4$. We answer it. For $m\ge5$ the fixed point need not be unique: an explicit five-type operator with rational coefficients has the two fixed points $(\frac13,\frac13,\frac13,0,0)$ and $(\frac19,\frac19,\frac19,\frac13,\frac13)$, neither attractive, and for $m\ge6$ any operator with two disjoint invariant triples of types has at least two fixed points, with a six-type example carrying a whole segment of them. Non-attractiveness fails from $m=4$ on, by the globally attracting equiprobable operators of Jamilov, Ladra and Mukhitdinov. Uniqueness at $m=4$ remains open; we explain why the constructions stop there and report that random and structured searches over four-type operators found no second fixed point. The finite verifications are carried out in exact arithmetic and checked in Lean~4.
+\end{abstract}
+
+\maketitle
+
+\section{Introduction}
+
+Let $\Simp=\{x\in\R^m: x_i\ge0,\ \sum_ix_i=1\}$. A \emph{quadratic stochastic operator} (QSO) on $\Simp$ is a map
+\begin{equation}\label{eq:qso}
+V_k(x)=\sum_{i,j=1}^m P_{ij,k}\,x_ix_j\qquad(k=1,\dots,m),
+\end{equation}
+where the heredity coefficients satisfy $P_{ij,k}=P_{ji,k}\ge0$ and $\sum_kP_{ij,k}=1$ for every pair $(i,j)$; then $V$ maps $\Simp$ into itself. These operators, introduced by Bernstein as models of the evolution of type frequencies in a population under random mating, have a large literature; the survey \cite{GMR11} and the problem list \cite{GR09} describe what is known and what is not. The operator is \emph{Volterra} when $P_{ij,k}=0$ unless $k\in\{i,j\}$ (an offspring is of the type of one of its parents), and \emph{strictly non-Volterra} when
+\begin{equation}\label{eq:snv}
+P_{ij,k}=0\qquad\text{whenever }k\in\{i,j\},
+\end{equation}
+an offspring is never of the type of either parent. Strictly non-Volterra operators exist only for $m\ge3$. For $m=3$ every one of them has the form
+\[
+x'=\alpha y^2+cz^2+2yz,\qquad y'=ax^2+dz^2+2xz,\qquad z'=bx^2+\beta y^2+2xy,
+\]
+with $a+b=c+d=\alpha+\beta=1$, and Rozikov and Zhamilov \cite{RZ09} proved:
+
+\begin{theorem}[{\cite{RZ09}; Theorem 6 of \cite{GR09}}]\label{thm:six}
+For all values of the parameters a strictly non-Volterra operator on $S^2$ has a unique fixed point, which is not attractive, and it has $2$-cycles and $3$-cycles depending on the parameters.
+\end{theorem}
+
+Problem 11 of \cite{GR09} asks: \emph{is Theorem 6 true for $m\ge4$?} This paper answers the question. The two clauses about the fixed point fail, at different thresholds.
+
+\begin{theorem}\label{thm:main}
+\leavevmode
+\begin{enumerate}
+\item[(i)] For every $m\ge4$ there is a strictly non-Volterra operator on $\Simp$ whose unique fixed point is globally attracting: the equiprobable operator $P_{ii,k}=\frac1{m-1}$ ($k\ne i$), $P_{ij,k}=\frac1{m-2}$ ($i\ne j$, $k\notin\{i,j\}$). So the non-attractiveness clause of \Cref{thm:six} fails for every $m\ge4$.
+\item[(ii)] For every $m\ge5$ there is a strictly non-Volterra operator on $\Simp$ with at least two fixed points. For $m=5$, every operator obtained from a three-type operator by the swap extension of \Cref{thm:swap} has exactly two; the simplest, the operator $W$ of \Cref{sec:five}, has rational coefficients and the fixed points $p=(\frac13,\frac13,\frac13,0,0)$ and $q=(\frac19,\frac19,\frac19,\frac13,\frac13)$, neither of them attractive. For $m\ge6$ every operator with two disjoint invariant triples of types has two fixed points, and one such six-type operator has a segment of fixed points. So the uniqueness clause of \Cref{thm:six} fails for every $m\ge5$.
+\end{enumerate}
+\end{theorem}
+
+Part (i) is not new: Jamilov, Ladra and Mukhitdinov \cite{JLM17} studied exactly the equiprobable family and proved that its fixed point is globally attracting for $m\ge4$; we include the computation of the Jacobian at the barycentre because it is the half of Problem~11 that the literature had already settled and because it is checked in Lean. Jamilov \cite{Jam16} also proved uniqueness of the fixed point for the symmetric strictly non-Volterra operators on four types, a partial answer to the uniqueness clause at $m=4$; his paper on one strictly non-Volterra operator on five types \cite{Jam17} we could not obtain, and we do not know whether it bears on the uniqueness question there. Part (ii) is the content of the paper. The example at $m=5$ is a face construction: the face spanned by three of the types is invariant and carries the unique fixed point of the three-type operator it inherits, and the cross rules are arranged so that a second fixed point appears in the interior. For $m\ge6$ two invariant triples carry two fixed points, and the obstruction that stops the construction at $m=4$ is exactly counted: two invariant triples must be disjoint, so $m=5$ admits at most one, and at $m=4$ an invariant triple forces the remaining coordinate to vanish identically. The case that remains open is stated precisely in \Cref{sec:four}: at $m=4$, is the fixed point of a strictly non-Volterra operator always unique? Random and structured searches (\Cref{sec:numerics}) found no operator on four types with two fixed points, and no proof either. The cycle clause of \Cref{thm:six} is not addressed.
+
+Every finite verification in the paper (the coefficient conditions of $W$, its two fixed points, the Jacobians and their spectra, the segment of fixed points of the six-type operator, the general face lemma) is carried out in exact rational arithmetic and, independently, in Lean~4 (\Cref{sec:lean}).
+
+\section{Preliminaries}\label{sec:prelim}
+
+We write $V=V_P$ for the operator \eqref{eq:qso}. The map $V$ is homogeneous of degree two on $\R^m$, so Euler's identity gives
+\begin{equation}\label{eq:euler}
+DV(x)\,x=2V(x)\qquad(x\in\R^m),
+\end{equation}
+and at a fixed point $x^*\in\Simp$ the number $2$ is an eigenvalue of $DV(x^*)$ with the radial eigenvector $x^*$. The simplex is invariant, its tangent space is the hyperplane $\{v:\sum_iv_i=0\}$, and attractiveness of a fixed point is decided by the eigenvalues of $DV(x^*)$ on that hyperplane; we call these the \emph{tangent eigenvalues}. For a strictly non-Volterra operator,
+\begin{equation}\label{eq:trace}
+\frac{\partial V_k}{\partial x_k}=2\sum_jP_{kj,k}\,x_j=0,\qquad\text{so}\qquad \tr DV(x)=0\quad\text{for every }x,
+\end{equation}
+and the tangent eigenvalues at a fixed point sum to $-2$. At $m=3$ this alone gives one tangent eigenvalue of modulus at least $1$, which is the non-attractiveness of \Cref{thm:six}; for $m\ge4$ the bound $2/(m-1)$ is below $1$ and excludes nothing.
+
+A subset $F$ of the types is an \emph{invariant face} if pairs inside $F$ produce only types in $F$: $P_{ij,k}=0$ for $i,j\in F$ and $k\notin F$. Then the face $\{x\in\Simp:\supp x\subset F\}$ is mapped into itself, and the restriction of $V$ to it is the QSO on $F$ with coefficients $(P_{ij,k})_{i,j,k\in F}$, which are again stochastic (the mass $\sum_{k\in F}P_{ij,k}=1$ for $i,j\in F$) and again strictly non-Volterra.
+
+\begin{lemma}[invariant faces]\label{lem:face}
+Let $F$ be an invariant face of $V$ and let $x\in\Simp$ with $\supp x\subset F$. Then $V_k(x)=0$ for $k\notin F$ and $V_k(x)=\sum_{i,j\in F}P_{ij,k}x_ix_j$ for $k\in F$. In particular a fixed point of the restricted operator on $F$, padded by zeros, is a fixed point of $V$.
+\end{lemma}
+
+\begin{proof}
+Every term $P_{ij,k}x_ix_j$ with $i\notin F$ or $j\notin F$ vanishes because $x$ is supported on $F$, and for $i,j\in F$ and $k\notin F$ the coefficient vanishes by invariance.
+\end{proof}
+
+\section{The equiprobable family: non-attractiveness fails from $m=4$}\label{sec:equi}
+
+Let $m\ge4$ and let $V$ be the equiprobable strictly non-Volterra operator of \Cref{thm:main}(i). Its barycentre $b=(\frac1m,\dots,\frac1m)$ is a fixed point, and the Jacobian there is explicit: by \eqref{eq:qso} and the symmetry of $P$, $\partial V_k/\partial x_j=2\sum_iP_{ij,k}x_i$, and at $b$ the sum $\sum_iP_{ij,k}$ equals $P_{jj,k}+\sum_{i\notin\{j,k\}}P_{ij,k}=\frac1{m-1}+1=\frac{m}{m-1}$ for $j\ne k$ and $0$ for $j=k$. Hence
+\begin{equation}\label{eq:equijac}
+DV(b)=\frac{2}{m-1}\,(J-I),
+\end{equation}
+with $J$ the all-ones matrix, so $DV(b)v=-\frac{2}{m-1}v$ for every tangent vector $v$ (those with $Jv=0$) and $DV(b)b=2b$, as \eqref{eq:euler} requires. The tangent spectrum is the single eigenvalue $-\frac2{m-1}$, of modulus $1$ at $m=3$ and smaller than $1$ for every $m\ge4$: the fixed point is attractive as soon as $m\ge4$. It is in fact globally attracting. A direct expansion gives, for $k\ne l$ and $S=\sum_ix_i$,
+\begin{equation}\label{eq:contract}
+V_k(x)-V_l(x)=\frac{(x_l-x_k)}{m-2}\Big(2S-\frac{m\,(x_k+x_l)}{m-1}\Big),
+\end{equation}
+and Jamilov, Ladra and Mukhitdinov \cite{JLM17} show from this that the coordinate range contracts along every orbit, so that every orbit converges to $b$; the numerical companion confirms the identities \eqref{eq:equijac} and \eqref{eq:contract} symbolically and the convergence on random orbits. Either way the non-attractiveness clause of \Cref{thm:six} fails for every $m\ge4$, and \eqref{eq:equijac} is checked in Lean for $m=4$.
+
+\section{Five types: two fixed points}\label{sec:five}
+
+Let $F=\{1,2,3\}$ and define the coefficients of $W$ on five types as follows (all coefficients not listed, and their symmetric copies $P_{ji,k}=P_{ij,k}$, are zero):
+\begin{align*}
+&\text{on the face: } P_{ii,k}=\tfrac12\ (i,k\in F,\ k\ne i),\qquad P_{ij,k}=1\ (\{i,j,k\}=F);\\
+&\text{across: } P_{i4,5}=P_{i5,4}=1\ (i\in F),\qquad P_{44,5}=1,\qquad P_{55,4}=1,\qquad P_{45,k}=\tfrac13\ (k\in F).
+\end{align*}
+Every pair has total mass one, $P$ is symmetric, and $P_{ij,k}=0$ whenever $k\in\{i,j\}$: $W$ is a strictly non-Volterra operator on $S^4$. Its coordinates are, for $k\in F$ with $\{a,b\}=F\setminus\{k\}$,
+\begin{equation}\label{eq:W}
+\begin{gathered}
+W_k(x)=\frac{x_a^2+x_b^2}{2}+2x_ax_b+\frac23x_4x_5\qquad(k\in F,\ \{a,b\}=F\setminus\{k\}),\\
+W_4(x)=x_5\,(2x_1+2x_2+2x_3+x_5),\qquad W_5(x)=x_4\,(2x_1+2x_2+2x_3+x_4).
+\end{gathered}
+\end{equation}
+The face $F$ is invariant, and the restriction of $W$ to it is the symmetric strictly non-Volterra operator on three types, whose unique fixed point is $(\frac13,\frac13,\frac13)$.
+
+\begin{proposition}\label{prop:five}
+$W$ has the two fixed points $p=(\frac13,\frac13,\frac13,0,0)$ and $q=(\frac19,\frac19,\frac19,\frac13,\frac13)$. The tangent eigenvalues of $DW$ are $\{2,-1,-1,-2\}$ at $p$ and $\{-\frac43,-\frac13,-\frac13,0\}$ at $q$; neither fixed point is attractive. These are the only fixed points of $W$ in $S^4$.
+\end{proposition}
+
+\begin{proof}
+At $p$: $W_k(p)=\frac{1/9+1/9}{2}+\frac29=\frac13$ for $k\in F$ and $W_4(p)=W_5(p)=0$. At $q$: $W_k(q)=\frac{1/81+1/81}{2}+\frac2{81}+\frac23\cdot\frac19=\frac1{27}+\frac2{27}=\frac19$ for $k\in F$, and $W_4(q)=\frac13\,(2\cdot\frac13+\frac13)=\frac13=W_5(q)$. The Jacobians are
+\[
+DW(p)=\begin{pmatrix}0&1&1&0&0\\1&0&1&0&0\\1&1&0&0&0\\0&0&0&0&2\\0&0&0&2&0\end{pmatrix},\qquad
+DW(q)=\begin{pmatrix}0&\frac13&\frac13&\frac29&\frac29\\ \frac13&0&\frac13&\frac29&\frac29\\ \frac13&\frac13&0&\frac29&\frac29\\ \frac23&\frac23&\frac23&0&\frac43\\ \frac23&\frac23&\frac23&\frac43&0\end{pmatrix}.
+\]
+At $p$ the eigenvectors $(1,1,1,0,0)$ and $(0,0,0,1,1)$ have eigenvalue $2$, the vectors $(-1,1,0,0,0)$ and $(-1,0,1,0,0)$ have eigenvalue $-1$, and $(0,0,0,-1,1)$ has eigenvalue $-2$; the radial vector $p$ is a multiple of the first, and the combination $(1,1,1,-\frac32,-\frac32)$ carries the eigenvalue $2$ into the tangent space. At $q$ the eigenvectors
+\[
+3q=(\tfrac13,\tfrac13,\tfrac13,1,1),\quad (0,0,0,-1,1),\quad (-1,1,0,0,0),\quad (-1,0,1,0,0),\quad (-\tfrac23,-\tfrac23,-\tfrac23,1,1)
+\]
+have eigenvalues $2,-\frac43,-\frac13,-\frac13,0$, the last four spanning the tangent space. Each set of five eigenvectors is linearly independent (the determinant of the matrix with these columns is nonzero; the Lean file computes it), so the spectra are complete. Since $p$ has a tangent eigenvalue of modulus $2$ and $q$ one of modulus $\frac43$, neither is attractive. Finally, the fixed-point equations $W(x)=x$, $\sum_kx_k=1$ form a zero-dimensional polynomial system: a lexicographic Gr\"obner basis has last element $x_5(3x_5-1)(x_5^2-3x_5-3)/3$, and solving the system exactly gives sixteen solutions, all real, of which exactly two have all coordinates nonnegative, namely $p$ and $q$ (\Cref{sec:numerics}).
+\end{proof}
+
+The example is one member of a family in which the count is always exactly two.
+
+\begin{theorem}[swap extension]\label{thm:swap}
+Let $U$ be any strictly non-Volterra operator on the three types $F=\{1,2,3\}$ and let $\rho$ be any probability vector on $F$. Define $W=W_{U,\rho}$ on five types by: the coefficients of $U$ on pairs inside $F$; $P_{i4,5}=P_{i5,4}=1$ for $i\in F$; $P_{44,5}=P_{55,4}=1$; and $P_{45,k}=\rho_k$ for $k\in F$. Then $W$ is a strictly non-Volterra operator with exactly two fixed points: the fixed point of $U$ on the face $F$, and one point with $x_4=x_5=\frac13$. The face fixed point has the tangent eigenvalue $2$ transverse to the face, so it is not attractive.
+\end{theorem}
+
+\begin{proof}
+The coefficient conditions are immediate. Write $s=x_4$, $t=x_5$ and $\sigma=x_1+x_2+x_3=1-s-t$. From the cross rules, $W_4(x)=t(2\sigma+t)=t(2-2s-t)$ and $W_5(x)=s(2-2t-s)$. At a fixed point, subtracting the two equations $s=t(2-2s-t)$ and $t=s(2-2t-s)$ gives $s-t=(t-s)(2-s-t)$, that is $(s-t)(3-s-t)=0$, so $s=t$ since $s+t\le1$; then $s=s(2-3s)$ forces $s=0$ or $s=\frac13$. If $s=t=0$ the point lies on the face $F$, where $W$ restricts to $U$, and \Cref{thm:six} gives exactly one fixed point there; it has $\partial W_4/\partial x_5=2\sigma=2$ and $\partial W_5/\partial x_4=2$ at that point, so the block of $DW$ on the coordinates $(x_4,x_5)$ is $\begin{pmatrix}0&2\\2&0\end{pmatrix}$ and $2$ is an eigenvalue of that block with eigenvector $e_4+e_5$; combined with the radial direction this gives a tangent eigenvector for the eigenvalue $2$ pointing into the simplex. If $s=t=\frac13$, write $u=(x_1,x_2,x_3)=v/3$ with $v$ a probability vector on $F$; then for $k\in F$, $W_k(x)=U_k(u)+2\rho_kst=\frac19U_k(v)+\frac29\rho_k$, and the fixed-point equation $u=W(x)$ reads $v=\frac13U(v)+\frac23\rho$. The map $v\mapsto\frac13U(v)+\frac23\rho$ sends the simplex on $F$ to itself and is a contraction for the $\ell^1$ norm: $DU=2A$ with $A$ column-stochastic, so $\|DU\|_{1\to1}\le2$ and the Lipschitz constant is at most $\frac23$. It therefore has exactly one fixed point, which gives exactly one fixed point of $W$ with $x_4=x_5=\frac13$.
+\end{proof}
+
+The operator of \Cref{prop:five} is $W_{U,\rho}$ with $U$ the symmetric three-type operator and $\rho$ uniform; there $v=(\frac13,\frac13,\frac13)$ and the interior fixed point is $q$. The determinant of $I-DW$ on the tangent space is $-12$ at $p$ and $\frac{112}{27}$ at $q$. For the interior point $q$ this makes its fixed-point index $+1$; the point $p$ lies on the boundary of the simplex with the transverse eigenvalue $2$, and its fixed-point index as a fixed point of the self-map of the simplex is $0$, so the indices add up to the Lefschetz number $1$ as they must (\Cref{sec:index}). The point $p$ is the fixed point of the invariant face, and $q$ is the extra fixed point that the cross rules create in the interior; \Cref{sec:numerics} describes the dynamics.
+
+\section{Six and more types: two invariant faces}\label{sec:six}
+
+\begin{proposition}\label{prop:six}
+Let $m\ge6$ and let $V$ be a strictly non-Volterra operator on $\Simp$ with two disjoint invariant triples $F$ and $G$. Then $V$ has at least two fixed points, one supported on $F$ and one on $G$.
+\end{proposition}
+
+\begin{proof}
+By \Cref{lem:face} the restriction of $V$ to the face spanned by $F$ is a strictly non-Volterra operator on three types, which by \Cref{thm:six} has a fixed point; padded by zeros it is a fixed point of $V$ supported on $F$. The same holds for $G$, and the two points are distinct since $F\cap G=\emptyset$.
+\end{proof}
+
+Such operators exist for every $m\ge6$: put any three-type strictly non-Volterra operator on each of $F$ and $G$, and let every other pair $(i,j)$ distribute its mass over any types outside $\{i,j\}$; for $m\ge7$ the remaining types can be treated the same way. One choice is worth recording.
+
+\begin{example}\label{ex:segment}
+On six types with $F=\{1,2,3\}$ and $G=\{4,5,6\}$, put the symmetric operator ($P_{ii,k}=\frac12$, $P_{ij,\text{third}}=1$) on each triple, and let a cross pair $(i,j)$, $i\in F$, $j\in G$, distribute its mass equally over the four types of $(F\setminus\{i\})\cup(G\setminus\{j\})$. For $x=(a,a,a,b,b,b)$ with $3a+3b=1$ one computes $V_k(x)=3a^2+3ab=a(3a+3b)=a$ for $k\in F$ and likewise $V_k(x)=b$ for $k\in G$: the whole segment $\{(a,a,a,\frac13-a,\frac13-a,\frac13-a):0\le a\le\frac13\}$ consists of fixed points. So a strictly non-Volterra operator can have infinitely many fixed points.
+\end{example}
+
+\section{Why the constructions stop at four types}\label{sec:four}
+
+Two invariant triples must be disjoint: if they shared a pair $\{i,j\}$, that pair would have to produce, with probability one, both the third type of the first triple and the third type of the second, which is impossible. So $m=5$ admits at most one invariant triple, which is why the second fixed point of $W$ had to be created in the interior by the cross rules rather than on a second face. At $m=4$ an invariant triple $F=\{1,2,3\}$ forces $V_4\equiv0$: pairs inside $F$ never produce type $4$, and a pair containing type $4$ never produces type $4$ by \eqref{eq:snv}, so every coefficient $P_{ij,4}$ vanishes. Hence every fixed point of a face-invariant four-type operator lies in the face, and there it is unique by \Cref{thm:six}. There is no invariant pair at all (a pair inside $\{i,j\}$ has nowhere in $\{i,j\}$ to land). So at $m=4$ neither mechanism of \Cref{sec:five,sec:six} is available, and the question that remains is the following.
+
+\begin{question}\label{q:four}
+Does every strictly non-Volterra quadratic stochastic operator on $S^3$ (four types) have a unique fixed point?
+\end{question}
+
+Some structure is visible. At $m=4$ each $V_k$ depends only on the three coordinates other than $x_k$, so a fixed point solves $x_k=Q_k(x_{-k})$ with $Q_k$ a quadratic form with nonnegative coefficients in the other three variables. The equiprobable operator contracts the coordinate range by \eqref{eq:contract} and so has a unique globally attracting fixed point, but a general four-type operator need not contract anything. For the symmetric subfamily (coefficients depending only on whether $i=j$) Jamilov \cite{Jam16} proved uniqueness of the fixed point on $S^3$. The index count of the next section reduces the general question to a single determinant inequality at interior fixed points, and shows that a counterexample, if one exists, has at least three fixed points. The searches described in \Cref{sec:numerics} found nothing.
+
+\section{An index count}\label{sec:index}
+
+For a QSO $V$ and $x\in\Simp$ let $A(x)$ be the $m\times m$ matrix with entries $A(x)_{kl}=\sum_iP_{il,k}x_i$. Then $DV(x)=2A(x)$ by the symmetry of $P$, $A(x)x=V(x)$, and $A(x)$ is column-stochastic: $\sum_kA(x)_{kl}=\sum_ix_i\sum_kP_{il,k}=1$. For a strictly non-Volterra operator its diagonal vanishes. At a fixed point $x$ is a Perron vector of $A(x)$, the sum-zero hyperplane is invariant under $A(x)$ since $A(x)^{\mathsf T}\mathbf 1=\mathbf 1$, and the tangent eigenvalues of $DV(x)$ are $2\mu$ over the eigenvalues $\mu$ of $A(x)$ other than the Perron eigenvalue $1$. Writing $p_A(t)=\det(tI-A)$ and $e_j$ for the elementary symmetric functions of the eigenvalues of $A$ (so $e_1=\tr A=0$ and $p_A(1)=0$), one gets
+\begin{equation}\label{eq:index}
+\det\big(I-DV(x)\big|_{T}\big)=-2^m\,p_A(\tfrac12)=
+\begin{cases}3+4\det A & (m=3),\\[2pt] 3+4e_3(A)-12\det A & (m=4),\end{cases}
+\end{equation}
+where $T$ is the tangent space. (Indeed $\prod_{\mu\ne1}(1-2\mu)=2^{m-1}p_A(\frac12)/(\frac12-1)$; then $e_2=e_3-1$ at $m=3$ and $e_2=e_3-e_4-1$ at $m=4$ from $p_A(1)=0$, and the rest is substitution.) These identities were checked symbolically at $m=3$ and numerically at $m=4$ to machine precision.
+
+The fixed points of $V$ are the fixed points of a continuous self-map of the compact convex set $\Simp$, so their indices sum to the Lefschetz number $1$, and an isolated interior fixed point at which $I-DV(x)|_T$ is invertible has index $\operatorname{sign}\det(I-DV(x)|_T)$. This gives a short proof of the uniqueness clause of \Cref{thm:six} and a precise form of \Cref{q:four}.
+
+\begin{proposition}\label{prop:index}
+\leavevmode
+\begin{enumerate}
+\item[(i)] A strictly non-Volterra operator on three types has exactly one fixed point.
+\item[(ii)] Let $V$ be a strictly non-Volterra operator on four types with no invariant triple. Then every fixed point of $V$ is interior; if all of them are nondegenerate their number is odd; and the fixed point is unique as soon as $12\det A(x)<3+4e_3(A(x))$ at every fixed point $x$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+A fixed point $x$ with support $S$ has $V_k(x)=0$ for $k\notin S$, and since all $x_ix_j$ with $i,j\in S$ are positive this says that every pair in $S$ lands in $S$: the support of a fixed point is an invariant face. A single type is never invariant ($P_{ii,i}=0$) and neither is a pair ($P_{ij,k}=0$ for $k\in\{i,j\}$), so at $m=3$ every fixed point is interior, and at $m=4$ every fixed point is interior unless some triple is invariant. (i) At $m=3$ the matrix $A(x)$ is nonnegative with zero diagonal, so $\det A=a_{12}a_{23}a_{31}+a_{13}a_{32}a_{21}\ge0$ and \eqref{eq:index} gives $\det(I-DV(x)|_T)\ge3$ at every fixed point; each fixed point is nondegenerate of index $+1$, and the indices sum to $1$. (ii) With every fixed point interior and nondegenerate, each index is $\pm1$ and they sum to $1$, so the number of fixed points is odd; if every index is $+1$ there is exactly one, and by \eqref{eq:index} the index at $x$ is $+1$ exactly when $12\det A(x)<3+4e_3(A(x))$.
+\end{proof}
+
+So at $m=4$ a second fixed point cannot appear alone: a counterexample to uniqueness must have at least three fixed points (or a degenerate one), and its middle one would have $12\det A(x)>3+4e_3(A(x))$. In constrained searches over four-type operators with $V(x)=x$ imposed, the smallest value of $3+4e_3-12\det A$ found was about $3.14$, attained at a point of the form $(a,a,a,a^2)$ with $a=(\sqrt{13}-3)/2$, and the largest value of $\det A$ about $0.056$ against the $0.25$ that an index $-1$ would need with $e_3=0$; without the fixed-point condition the quantity can vanish, so a proof must use $V(x)=x$. We record the question in the form the count gives it.
+
+\begin{question}\label{q:det}
+Does every strictly non-Volterra operator on four types satisfy $12\det A(x)<3+4e_3(A(x))$ at each of its fixed points $x$?
+\end{question}
+
+\section{Numerical checks}\label{sec:numerics}
+
+The companion script verifies in exact rational arithmetic the coefficient conditions on $W$, the two fixed points, the Jacobians, their spectra and the identity \eqref{eq:contract}, and it computes the following.
+
+\emph{All fixed points of $W$.} Newton's method on the affine hull of the simplex from three thousand random starts, deduplicated, finds sixteen real solutions of $W(x)=x$, of which two lie in the simplex ($p$ and $q$) and fourteen have a negative coordinate; a lexicographic Gr\"obner basis of the system confirms that the solution set is finite with last polynomial $x_5(3x_5-1)(x_5^2-3x_5-3)/3$.
+
+\emph{Dynamics of $W$.} Orbits from random starts, iterated four thousand times with the sum renormalised at each step to prevent the compounding of rounding error ($\sum_kW_k(x)=(\sum_kx_k)^2$), were classified by their period: \input{dynamics_line.tex}
+
+\emph{Random and vertex operators.} Strictly non-Volterra operators were generated with Dirichlet weights on every admissible target set (concentration $1$, and $0.1$ for sparse operators), and their fixed points in the simplex counted by Newton's method from $120$ starts each. Every one of $500$ four-type operators, $300$ five-type operators and $60$ six-type operators had exactly one fixed point in the simplex. The four-type coefficient polytope has $3^4\cdot2^6=5184$ vertices (each pair sends its whole mass to one admissible type); every vertex operator has exactly one fixed point in the simplex. The five-type operator $W$ has two, and $200$ swap extensions $W_{U,\rho}$ of random three-type operators $U$ with random $\rho$ all had exactly two, both with $x_4=x_5\in\{0,\frac13\}$ as \Cref{thm:swap} says; the six-type operator of \Cref{ex:segment} has a segment, and a six-type operator with the same invariant triples and random cross rules has exactly the two face fixed points. A finite search proves nothing about the operators it does not reach, and it is reported as evidence for \Cref{q:four}, not as an answer.
+
+\section{Formal verification}\label{sec:lean}
+
+The file \texttt{QSOFixedPoints.lean}, available with the code, is checked by Lean~4 (version 4.33.1) against Mathlib. It defines the operator \eqref{eq:qso} and its Jacobian for an arbitrary number of types and proves, in that generality, Euler's identity \eqref{eq:euler}, the vanishing of the diagonal of the Jacobian and hence of its trace for strictly non-Volterra operators \eqref{eq:trace}, the invariant-face lemma (\Cref{lem:face}) as a statement about finite sums, and the four-type observation that a face-invariant operator has $V_4\equiv0$. For the five-type operator $W$, given by its coefficient table, it verifies by exact rational computation that $W$ is symmetric, nonnegative, row-stochastic and strictly non-Volterra, that $W(p)=p$ and $W(q)=q$ with $p\ne q$, the two Jacobian matrices, the ten eigen-equations of \Cref{prop:five} together with the non-vanishing determinants of the two eigenvector matrices, and the membership of the tangential eigenvectors in the sum-zero hyperplane. It also verifies the equiprobable four-type operator's coefficient conditions and the Jacobian \eqref{eq:equijac} at its barycentre with the tangent eigenvalue $-\frac23$, the six-type operator of \Cref{ex:segment} with the identity $V(a,a,a,\frac13-a,\frac13-a,\frac13-a)=(a,a,a,\frac13-a,\frac13-a,\frac13-a)$ for every $a$, and the algebraic step of \Cref{thm:swap} (the two equations for $x_4,x_5$ force $x_4=x_5\in\{0,\frac13\}$). \texttt{\#print axioms} on every theorem reports only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. Not formalised: \Cref{thm:six} itself (cited), the Gr\"obner computation, the contraction step of \Cref{thm:swap}, and the global attraction of \Cref{sec:equi}.
+
+\section{Open questions}
+
+\begin{question}
+\Cref{q:four}: uniqueness of the fixed point for four types.
+\end{question}
+
+\begin{question}
+For which $m$ and which strictly non-Volterra operators do $2$-cycles and $3$-cycles exist (clause (2) of \Cref{thm:six})? In the five-type example the orbits observed numerically are described in \Cref{sec:numerics}.
+\end{question}
+
+\begin{question}
+What is the maximal number of isolated fixed points of a strictly non-Volterra operator on $\Simp$? The Gr\"obner computation bounds it for $W$; a general bound in terms of $m$ is not known to us.
+\end{question}
+
+\section*{Funding}
+The research presented in this paper was supported by the European Research Council (ERC) under the European Union's Horizon Europe research and innovation programme (grant agreement No.~101041711), by the Simons Foundation as part of the Collaboration on the Mathematical and Scientific Foundations of Deep Learning, by Heights Labs, by Convex Nexus Capital, by the Israel Science Foundation (grant number 2258/19), and by the Israel Science Foundation (ISF Grant 4101/25).
+
+\section*{Declaration of competing interest}
+The author holds equity in Heights Labs and in Convex Nexus Capital and has a management role at Convex Nexus Capital. These entities are included in the funding declaration above.
+
+\section*{Declaration of generative AI and AI-assisted technologies}
+This paper is a product of an ongoing project on the use of AI systems for research mathematics, provisionally called Math Brain, which studies how to make such systems better at solving open problems; the project and its tooling will be released publicly in due course. Every part of the mathematical and technical work reported here was carried out by AI systems, and the record of what each did is as follows.
+\begin{enumerate}
+\item The problem was recorded by an automated survey of open problems in the probability literature (a Claude session, Anthropic, Claude Opus 5 and Claude Fable 5.1, 8 September 2026) reading \cite{GR09}, which noted the zero-trace mechanism of \eqref{eq:trace} and, on 9 September, that the non-attractiveness clause fails for the equiprobable family, with the reference \cite{JLM17}.
+\item The five-type example, the two-face construction for $m\ge6$, the count of why the constructions stop at $m=4$, and the first numerical searches were found on 11 September 2026 by a Claude session (Claude Opus 5 and Claude Fable 5.1), after a random search over interior points had found nothing and the search was redirected to invariant faces.
+\item The result was independently re-derived in exact arithmetic on 12 September 2026 by a Claude session auditing the campaign's records.
+\item On 14 September 2026 a Claude Fable 5.1 session re-verified the example, found the segment of fixed points of \Cref{ex:segment}, ran the literature search (Semantic Scholar citation graph of \cite{GR09}, web searches), wrote the numerical code, the Lean file and this manuscript, and commissioned three adversarial referee reviews (Claude Fable 5.1). The reviews re-derived every claim, corrected the description of the fixed point $p$ (a boundary point of index $0$, not a saddle of index $-1$, as an earlier record had it), supplied the attribution of \Cref{thm:six} and the references \cite{Jam16, Jam17}, and produced the index identities \eqref{eq:index} with the proof of \Cref{prop:index}(i) and the reduction of \Cref{prop:index}(ii), including the constrained searches reported after it, and the swap-extension statement of \Cref{thm:swap}; the session re-derived the identities and the proof of \Cref{thm:swap} before including them.
+\end{enumerate}
+The author's role was to set the goals of the project, to commission and direct the runs, and to approve the release; the author did not carry out the mathematics, the verification, the computations or the writing, and does not claim to have done so. The finite verifications have been machine-checked; the arguments have been re-derived by several independent AI reviewers but not refereed by a human mathematician; the author takes responsibility for the decision to publish.
+
+\section*{Data and code availability}
+The numerical code, the Lean file with its build log and axiom report, and the \LaTeX{} source are available at
+\begin{center}
+\url{https://github.com/yspennstate/strictly-nonvolterra-qso-fixed-points}
+\end{center}
+
+\begin{thebibliography}{9}
+
+\bibitem{GMR11} R. N. Ganikhodzhaev, F. M. Mukhamedov and U. A. Rozikov, Quadratic stochastic operators and processes: results and open problems, \emph{Infin. Dimens. Anal. Quantum Probab. Relat. Top.} 14 (2011), 279--335.
+
+\bibitem{GR09} R. N. Ganikhodzhaev and U. A. Rozikov, Quadratic stochastic operators: results and open problems, arXiv:0902.4207 (2009).
+
+\bibitem{Jam16} U. U. Jamilov, On symmetric strictly non-Volterra quadratic stochastic operators, \emph{Discontinuity, Nonlinearity, and Complexity} 5 (2016), 263--283.
+
+\bibitem{Jam17} U. U. Jamilov, Dynamics of a strictly non-Volterra quadratic stochastic operator on $S^4$, \emph{Uzbek Math. J.} 2017, no. 2, 66--75.
+
+\bibitem{JLM17} U. U. Jamilov, M. Ladra and R. T. Mukhitdinov, On the equiprobable strictly non-Volterra quadratic stochastic operators, \emph{Qual. Theory Dyn. Syst.} 16 (2017), 645--655.
+
+\bibitem{RZ09} U. A. Rozikov and U. U. Zhamilov, The dynamics of strictly non-Volterra quadratic stochastic operators on the 2-simplex, \emph{Sb. Math.} 200 (2009), 1339--1351.
+
+\end{thebibliography}
+
+\end{document}

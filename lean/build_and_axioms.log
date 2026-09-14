@@ -1,0 +1,31 @@
+Prob1000/QSOFixedPoints.lean:243:66: warning: Used `tac1 <;> tac2` where `(tac1; tac2)` would suffice
+
+Note: This linter can be disabled with `set_option linter.unnecessarySeqFocus false`
+'QSO.swap_coordinates' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.euler' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.trace_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.face_fixed_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.four_types_face' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_symm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_nonneg' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_snv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_fixes_p' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.W_fixes_q' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.p_ne_q' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.jac_p' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.jac_q' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.eig_p' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.eigvecs_p_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.eig_q' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.eigvecs_q_det' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.tangent_vectors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.eig_p_tangent_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.E4_rows' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.E4_snv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.E4_fixes_bary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.E4_jac_bary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.E4_tangent_eigen' depends on axioms: [propext, Classical.choice, Quot.sound]
+'QSO.segment_fixed' depends on axioms: [propext, Classical.choice, Quot.sound]
+
+exit=0
