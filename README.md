@@ -1,4 +1,4 @@
-# Strictly non-Volterra quadratic stochastic operators: the fixed point need not be unique
+# Fixed points of strictly non-Volterra quadratic stochastic operators in four or more types
 
 Companion material for the paper of the same title (Y. Shmalo, September 2026), which answers Problem 11
 of Ganikhodzhaev and Rozikov, *Quadratic stochastic operators: results and open problems* (2009): Theorem 6
