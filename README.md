@@ -22,6 +22,9 @@ Contents
   conditions, fixed points, Jacobians and complete spectra; the equiprobable four-type Jacobian at the
   barycentre; the six-type segment of fixed points), with the build log and axiom report. It compiles
   against Mathlib with Lean 4.33.1 (`lean/lean-toolchain`, `lean/lake-manifest.json`).
+- `lean/QSOFourTypeUnique.lean` the Lean 4 proof of the four-type uniqueness theorem (`QSO4.unique_fixed_point`):
+  for any coefficient table on four types that is symmetric, nonnegative, stochastic and strictly non-Volterra,
+  two fixed points in the simplex coincide. `lean/build_four_type.log` is its build and axiom report.
 
 To reproduce the numerics: `python numerics/qso_fixed_points.py` (numpy, sympy, matplotlib). To check the
 Lean file: put it in a Lake project depending on Mathlib at the pinned commit and run `lake env lean QSOFixedPoints.lean`.

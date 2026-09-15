@@ -1,0 +1,7 @@
+Lean 4.33.1 with Mathlib at commit 0df444a360eaa60ab8c11dca51a86af692955474 (the v4.33.1 bump), lake build on GitHub Actions (ubuntu-latest, leanprover/lean-action), 15 September 2026.
+
+ℹ [8706/8709] Built QSOFourTypeUnique (58s)
+info: QSOFourTypeUnique.lean:352:0: 'QSO4.unique_fixed_point' depends on axioms: [propext, Classical.choice, Quot.sound]
+✔ [8707/8709] Ran qso_fixed_points/QSOFourTypeUnique:default
+Build completed successfully (8709 jobs).
+'QSO4.unique_fixed_point' depends on axioms: [propext, Classical.choice, Quot.sound]
