@@ -43,7 +43,7 @@ Let $\Simp=\{x\in\R^m: x_i\ge0,\ \sum_ix_i=1\}$. A \emph{quadratic stochastic op
 \begin{equation}\label{eq:qso}
 V_k(x)=\sum_{i,j=1}^m P_{ij,k}\,x_ix_j\qquad(k=1,\dots,m),
 \end{equation}
-where the heredity coefficients satisfy $P_{ij,k}=P_{ji,k}\ge0$ and $\sum_kP_{ij,k}=1$ for every pair $(i,j)$; then $V$ maps $\Simp$ into itself. These operators, introduced by Bernstein as models of the evolution of type frequencies in a population under random mating, have a large literature; the survey \cite{GMR11} and the problem list \cite{GR09} describe what is known and what is not. The operator is \emph{Volterra} when $P_{ij,k}=0$ unless $k\in\{i,j\}$ (an offspring is of the type of one of its parents), and \emph{strictly non-Volterra} when
+where the heredity coefficients satisfy $P_{ij,k}=P_{ji,k}\ge0$ and $\sum_kP_{ij,k}=1$ for every pair $(i,j)$; then $V$ maps $\Simp$ into itself. These operators, introduced by Bernstein \cite{Ber42} as models of the evolution of type frequencies in a population under random mating, have a large literature (see the monograph of Lyubich \cite{Lyu92}); the survey \cite{GMR11} and the problem list \cite{GR09} describe what is known and what is not. The operator is \emph{Volterra} when $P_{ij,k}=0$ unless $k\in\{i,j\}$ (an offspring is of the type of one of its parents), and \emph{strictly non-Volterra} when
 \begin{equation}\label{eq:snv}
 P_{ij,k}=0\qquad\text{whenever }k\in\{i,j\},
 \end{equation}
@@ -251,7 +251,7 @@ The companion script verifies in exact rational arithmetic the coefficient condi
 
 \section{Formal verification}\label{sec:lean}
 
-The file \texttt{QSOFixedPoints.lean}, available with the code, is checked by Lean~4 (version 4.33.1) against Mathlib. It defines the operator \eqref{eq:qso} and its Jacobian for an arbitrary number of types and proves, in that generality, Euler's identity \eqref{eq:euler}, the vanishing of the diagonal of the Jacobian and hence of its trace for strictly non-Volterra operators \eqref{eq:trace}, the invariant-face lemma (\Cref{lem:face}) as a statement about finite sums, and the four-type observation that a face-invariant operator has $V_4\equiv0$. For the five-type operator $W$, given by its coefficient table, it verifies by exact rational computation that $W$ is symmetric, nonnegative, row-stochastic and strictly non-Volterra, that $W(p)=p$ and $W(q)=q$ with $p\ne q$, the two Jacobian matrices, the ten eigen-equations of \Cref{prop:five} together with the non-vanishing determinants of the two eigenvector matrices, and the membership of the tangential eigenvectors in the sum-zero hyperplane. It also verifies the equiprobable four-type operator's coefficient conditions and the Jacobian \eqref{eq:equijac} at its barycentre with the tangent eigenvalue $-\frac23$, the six-type operator of \Cref{ex:segment} with the identity $V(a,a,a,\frac13-a,\frac13-a,\frac13-a)=(a,a,a,\frac13-a,\frac13-a,\frac13-a)$ for every $a$, and the algebraic step of \Cref{thm:swap} (the two equations for $x_4,x_5$ force $x_4=x_5\in\{0,\frac13\}$). A second file, \texttt{QSOFourTypeUnique.lean}, formalises \Cref{thm:four} in full for an arbitrary coefficient table on four types satisfying the hypotheses: the cap \eqref{eq:cap} in the form $x_k\le\frac25$, the monotonicity of $V_i$ in the other coordinates, the polarisation identity \eqref{eq:polar}, the transfer bound of \Cref{lem:transfer}, the count of sign classes, and the final contradiction. \texttt{\#print axioms} on every theorem in both files reports only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. Not formalised: \Cref{thm:six} itself (cited), the Gr\"obner computation, the contraction step of \Cref{thm:swap}, the global attraction of \Cref{sec:equi}, and \Cref{prop:index}.
+The file \texttt{QSOFixedPoints.lean}, available with the code, is checked by Lean~4 \cite{Lean4} (version 4.33.1) against Mathlib \cite{Mathlib}. It defines the operator \eqref{eq:qso} and its Jacobian for an arbitrary number of types and proves, in that generality, Euler's identity \eqref{eq:euler}, the vanishing of the diagonal of the Jacobian and hence of its trace for strictly non-Volterra operators \eqref{eq:trace}, the invariant-face lemma (\Cref{lem:face}) as a statement about finite sums, and the four-type observation that a face-invariant operator has $V_4\equiv0$. For the five-type operator $W$, given by its coefficient table, it verifies by exact rational computation that $W$ is symmetric, nonnegative, row-stochastic and strictly non-Volterra, that $W(p)=p$ and $W(q)=q$ with $p\ne q$, the two Jacobian matrices, the ten eigen-equations of \Cref{prop:five} together with the non-vanishing determinants of the two eigenvector matrices, and the membership of the tangential eigenvectors in the sum-zero hyperplane. It also verifies the equiprobable four-type operator's coefficient conditions and the Jacobian \eqref{eq:equijac} at its barycentre with the tangent eigenvalue $-\frac23$, the six-type operator of \Cref{ex:segment} with the identity $V(a,a,a,\frac13-a,\frac13-a,\frac13-a)=(a,a,a,\frac13-a,\frac13-a,\frac13-a)$ for every $a$, and the algebraic step of \Cref{thm:swap} (the two equations for $x_4,x_5$ force $x_4=x_5\in\{0,\frac13\}$). A second file, \texttt{QSOFourTypeUnique.lean}, formalises \Cref{thm:four} in full for an arbitrary coefficient table on four types satisfying the hypotheses: the cap \eqref{eq:cap} in the form $x_k\le\frac25$, the monotonicity of $V_i$ in the other coordinates, the polarisation identity \eqref{eq:polar}, the transfer bound of \Cref{lem:transfer}, the count of sign classes, and the final contradiction. \texttt{\#print axioms} on every theorem in both files reports only \texttt{propext}, \texttt{Classical.choice} and \texttt{Quot.sound}. Not formalised: \Cref{thm:six} itself (cited), the Gr\"obner computation, the contraction step of \Cref{thm:swap}, the global attraction of \Cref{sec:equi}, and \Cref{prop:index}.
 
 \section{Open questions}
 
@@ -283,7 +283,11 @@ The numerical code, the Lean file with its build log and axiom report, and the \
 
 The paper is part of the Math Brain project, whose public repository is \url{https://github.com/yspennstate/math-brain-public}~\cite{MathBrainRepo}.
 
-\begin{thebibliography}{9}
+\begin{thebibliography}{13}
+
+\bibitem{Ber42} S. N. Bernstein, Solution of a mathematical problem connected with the theory of heredity, \emph{Ann. Math. Statistics} 13 (1942), 53--61. Russian original: \emph{Ann. Sci. Ukraine} 1 (1924), 83--114.
+
+\bibitem{Lean4} L. de Moura and S. Ullrich, The Lean~4 theorem prover and programming language, in: \emph{Automated Deduction -- CADE 28}, Lecture Notes in Comput. Sci. 12699, Springer, 2021, 625--635.
 
 \bibitem{GMR11} R. N. Ganikhodzhaev, F. M. Mukhamedov and U. A. Rozikov, Quadratic stochastic operators and processes: results and open problems, \emph{Infin. Dimens. Anal. Quantum Probab. Relat. Top.} 14 (2011), 279--335.
 
@@ -294,6 +298,10 @@ The paper is part of the Math Brain project, whose public repository is \url{htt
 \bibitem{Jam17} U. U. Jamilov, Dynamics of a strictly non-Volterra quadratic stochastic operator on $S^4$, \emph{Uzbek Math. J.} 2017, no. 2, 66--75.
 
 \bibitem{JLM17} U. U. Jamilov, M. Ladra and R. T. Mukhitdinov, On the equiprobable strictly non-Volterra quadratic stochastic operators, \emph{Qual. Theory Dyn. Syst.} 16 (2017), 645--655.
+
+\bibitem{Lyu92} Yu. I. Lyubich, \emph{Mathematical Structures in Population Genetics}, Biomathematics 22, Springer, Berlin, 1992.
+
+\bibitem{Mathlib} The mathlib Community, The Lean mathematical library, in: \emph{Proceedings of the 9th ACM SIGPLAN International Conference on Certified Programs and Proofs (CPP 2020)}, ACM, 2020, 367--381.
 
 \bibitem{RZ09} U. A. Rozikov and U. U. Zhamilov, The dynamics of strictly non-Volterra quadratic stochastic operators on the 2-simplex, \emph{Sb. Math.} 200 (2009), 1339--1351.
 
